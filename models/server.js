@@ -1,6 +1,8 @@
 
 const express = require('express');
 const {router} = require('../routes/usuarios');
+const {dataBase} = require('../database/config.db');
+
 var cors = require('cors');
 
 class Server {
@@ -10,8 +12,13 @@ class Server {
         this.port = process.env.PORT;
         this.usuariosRouterPatch  = '/api/usuarios';
 
+        this.conexionDB();
         this.middlewares();
         this.routes();
+    }
+
+    conexionDB(){
+        dataBase;
     }
 
     routes(){
