@@ -1,9 +1,11 @@
 const express = require('express');
 
 const { check } = require('express-validator');
-const { validarCampos } = require('../middlewares/validador-campos');
 
-const router = express.Router();
+const {isAdminRole,
+        tieneRole,
+        validarCampos,
+        validarJWT} = require('../middlewares/');
 
 const { usuarioGet,
         usuarioDelete, 
@@ -13,6 +15,10 @@ const { usuarioGet,
 const {validarRoles,
         existeCorreo,
         existeIDenMongo}= require('../helpers/bd_validation');
+
+
+
+const router = express.Router();
 
 
 router.get('/',usuarioGet);
@@ -27,7 +33,6 @@ router.post('/',[
     validarCampos    //Luego de la validaciones , se ejecuta este middleware
 ],usuarioPost);
 
-
 router.put('/:id',[
     check('id','No es un id valido').isMongoId(),
     check('id').custom(existeIDenMongo),
@@ -37,6 +42,9 @@ router.put('/:id',[
 
 
 router.delete('/:id',[
+    validarJWT,
+    isAdminRole, //Fuerza que sea administrador
+    tieneRole('ADMIN_ROLE','VENTAS_ROLE'), //Podemos enviar argumentos en los middlewares
     check('id','No es un id valido').isMongoId(),
     check('id').custom(existeIDenMongo),
     validarCampos
@@ -44,6 +52,4 @@ router.delete('/:id',[
 
 
 
-module.exports = {
-    router
-}
+module.exports =  router

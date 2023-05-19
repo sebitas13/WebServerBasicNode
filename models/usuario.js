@@ -50,7 +50,8 @@ UsuarioSchema.methods.getInitials = function() {
 }
 
 UsuarioSchema.methods.toJSON = function(){
-    const {__v,password,...usuario} = this.toObject();
+    const {__v,password,_id,...usuario} = this.toObject(); //Devuelve todo menos _v , password y _id
+    usuario.uid = _id;
     return usuario
 }
 

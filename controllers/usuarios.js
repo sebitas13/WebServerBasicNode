@@ -38,7 +38,7 @@ const usuarioPost = async (req,res=response)=>{
 
 
     const usuario = new Usuario({
-        nombre,
+        nombre, //Es lo mismo de nombre : nombre
         correo,
         password,
         rol
@@ -93,9 +93,14 @@ const usuarioDelete = async (req,res=response)=>{
     //Borrado logico para conservar la integridad referencial
     const usuario = await Usuario.findByIdAndUpdate(id,{estado:false});
 
+    const usuarioAuthentified = req.usuario;
 
+    
+
+    
     res.json(
-        usuario
+        {usuario,
+        usuarioAuthentified}
     );
 }
 

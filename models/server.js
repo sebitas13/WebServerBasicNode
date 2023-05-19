@@ -1,6 +1,5 @@
 
 const express = require('express');
-const {router} = require('../routes/usuarios');
 const {dataBase} = require('../database/config.db');
 
 var cors = require('cors');
@@ -10,7 +9,8 @@ class Server {
     constructor(){
         this.app = express();
         this.port = process.env.PORT;
-        this.usuariosRouterPatch  = '/api/usuarios';
+        this._usuariosRouterPatch  = '/api/usuarios';
+        this._authPath = '/api/auth';
 
         this.conexionDB();
         this.middlewares();
@@ -22,7 +22,10 @@ class Server {
     }
 
     routes(){
-        this.app.use(this.usuariosRouterPatch, router);
+
+        this.app.use(this._usuariosRouterPatch, require('../routes/usuarios'));
+        this.app.use(this._authPath,require('../routes/auth'));
+        
     }
 
     middlewares(){
